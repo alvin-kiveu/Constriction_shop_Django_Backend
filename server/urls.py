@@ -4,14 +4,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from products.views import ItemView, UserProfileView
+from products.views import ItemView
 from rest_framework import routers
 
 route = routers.DefaultRouter()
 route.register(r'items', ItemView, basename='itemview')
-route.register(r'userprofiles', UserProfileView, basename='userprofile')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(route.urls)),
+    path('api/', include('users.urls'))
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
