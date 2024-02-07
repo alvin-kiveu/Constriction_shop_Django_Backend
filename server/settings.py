@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'users.apps.UsersConfig',
+    'payments',
     
 
 
@@ -135,6 +136,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'users.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny'
+    ]
+}
+
+SITE_URL = 'http://localhost:3000'
+
+STRIPE_SECRET_KEY = 'sk_test_51Oh6mVL5Tg0T8iwi17OsY6BTHCoDFHOoyhfsqSw2BzEkG8bgG9Abt5leZvowiEnw5pftgJ13027XaNKAtzJH2ad500zAPtTXtT'
+
 
 
 # Default primary key field type

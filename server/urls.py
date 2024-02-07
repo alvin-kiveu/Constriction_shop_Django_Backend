@@ -13,5 +13,6 @@ route.register(r'items', ItemView, basename='itemview')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(route.urls)),
-    path('api/', include('users.urls'))
+    path('api/', include('users.urls')),
+    path('api/stripe/',include('payments.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
