@@ -16,23 +16,20 @@ class StripeCheckOutView(APIView):
 
         try:
              # Fetch product and price data from your API
-            product_data = requests.get('http://127.0.0.1:8000/api/items/')
-            products = product_data.json()
+            cart_items = request.data.get('cartItems', [])
 
             # Extract product and price information
             line_items = []
-            for product in products:
+            for cart in cart_items:
                 line_item = {
                     'price_data': {
-                        'currency': 'usd',
-                        'unit_amount': int(float(product['price']) * 100),  # Convert price to cents
+                        'currency': 'kes',
+                        'unit_amount': int(float(cart['price']) * 100),  # Convert price to cents
                         'product_data': {
-                            'name': product['title'],
-                            'description': product['description'],
-                            'images': [product['image']],
+                            'name': cart['title'],                            
                         },
                     },
-                    'quantity': 1,
+                    'quantity': cart['quantity'],
                 }
                 line_items.append(line_item)
 
@@ -44,7 +41,8 @@ class StripeCheckOutView(APIView):
                 cancel_url=settings.SITE_URL + '/?canceled=true',
             )
 
-            return redirect(checkout_session.url)
+            return Response({'checkout_session_url': checkout_session.url})
+
 
         except StripeError as e:
             # Log the specific error
