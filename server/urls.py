@@ -6,7 +6,6 @@ from django.conf.urls.static import static
 
 from products.views import ItemView
 from rest_framework import routers
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 route = routers.DefaultRouter()
 route.register(r'items', ItemView, basename='itemview')
@@ -17,5 +16,3 @@ urlpatterns = [
     path('api/', include('users.urls')),
     path('api/stripe/',include('payments.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-urlpatterns += staticfiles_urlpatterns()

@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import os
-import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-#&_^)00wd+d@y!gc-k#m$9cs=m_lys)g71o0xgg@-$-4=wm63p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
 
 CORS_ALLOWED_ORIGINS = [
    ' http://localhost:3000',
@@ -81,20 +81,15 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-        
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'django_jenga_products',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': '127.0.0.1',
-#         'PORT':'3306',
-#     }
-# }
-
 DATABASES = {
-    'default':dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_jenga_products',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT':'3306',
+    }
 }
 
 # CORS_ORIGIN_WHITELIST = ['']//same as CORS_ALLOWED_ORIGINS
