@@ -41,8 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'users.apps.UsersConfig',
     'payments',
-    
-
+    'drf_spectacular',
 
 ]
 
@@ -138,10 +137,17 @@ MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
-    ]
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.AllowAny'
+    # ]
 }
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Django DRF Jenga_ecommerce",
+    }
+
 
 SITE_URL = 'http://localhost:3000'
 
