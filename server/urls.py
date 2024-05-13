@@ -19,6 +19,7 @@ urlpatterns = [
     path('api/', include(route.urls)),
     path('api/', include('users.urls')),
     path('api/stripe/',include('payments.urls')),
+    path('api/mpesa/',include('payments.urls')),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/docs/', SpectacularSwaggerView.as_view(url_name='schema')),
     path('professionals/', professionals, name='professionals')

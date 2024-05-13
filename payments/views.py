@@ -10,6 +10,7 @@ from products.models import Item
 from django.http import JsonResponse
 import json
 import os
+import random
 
 
 
@@ -59,12 +60,35 @@ class StripeCheckOutView(APIView):
             )
 
 
-def initiate_stk_push(request):
-    if request.method == 'POST':
-        amount = request.POST.get('amount')
-        msisdn = request.POST.get('msisdn')
-        reference = request.POST.get('reference')
+def generate_random_reference(length=8):
+    # Generate a random number with the specified length
+    random_number = ''.join(random.choices('123456789', k=length))
+    return 'UMS' + random_number
 
+def testrandom(request):
+    if request.method == 'GET':
+        reference = generate_random_reference()
+        return JsonResponse({"reference": reference})
+
+
+def initiate_stk_push(request):
+    if request.method == 'GET':
+        # Get the parameters from the query string
+        phone = request.GET.get('phone')
+        amount = request.GET.get('amount')
+        
+        # Check if phone and amount are present
+        if phone is None or amount is None:
+            return JsonResponse({"error": "phone and amount are required in the query string"}, status=400)
+        
+        print(phone, amount)
+        
+        # GENERATE A RANDOM REFERENCE NUMBER
+        reference = generate_random_reference()
+        # GET THE API KEY AND EMAIL FROM THE SETTINGS
+        api_key = settings.UMS_PAY_API_KEY
+        email = settings.UMS_PAY_EMAIL
+        # Process POST request and initiate STK push payment
         # Endpoint URL
         url = "https://api.umeskiasoftwares.com/api/v1/intiatestk"
 
@@ -75,10 +99,10 @@ def initiate_stk_push(request):
 
         # Request payload
         payload = {
-            "api_key": "VE5MTlkzRk06MTlwNjlkZWM=",
-            "email": "example@gmail.com",
+            "api_key": api_key,
+            "email": email,
             "amount": amount,
-            "msisdn": msisdn,
+            "msisdn": phone,
             "reference": reference
         }
 
@@ -89,10 +113,59 @@ def initiate_stk_push(request):
         if response.status_code == 200:
             # Parse response JSON
             data = response.json()
-            return JsonResponse({"success": True, "transaction_request_id": data["tranasaction_request_id"]})
+            # Correct the key name here
+            return JsonResponse({"success": True, "data": data})
         else:
             return JsonResponse({"success": False, "error": response.text}, status=response.status_code)
+    else:
+        # CONSOLE TO THE TERMINAL
+        print("Method not allowed")
+        # Return a method not allowed response for other HTTP methods
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+      
+      
 
+
+def verify_payment_status(request):
+    if request.method == 'GET':
+        
+        # Get the transaction request ID from the request data
+        transaction_request_id = request.GET.get('transaction_request_id')
+        print(transaction_request_id)
+
+        # Check if transaction_request_id is present
+        if transaction_request_id is None:
+            return JsonResponse({"error": "transaction_request_id is required"}, status=400)
+
+        # Get API key and email from settings
+        api_key = settings.UMS_PAY_API_KEY
+        email = settings.UMS_PAY_EMAIL
+
+        # Endpoint URL for verifying payment status
+        url = "https://api.umeskiasoftwares.com/api/v1/transactionstatus"
+
+        # Request payload
+        payload = {
+            "api_key": api_key,
+            "email": email,
+            "tranasaction_request_id": transaction_request_id
+        }
+
+        # Send POST request to verify payment status
+        response = requests.post(url, json=payload)
+
+        # Check if request was successful
+        if response.status_code == 200:
+            # Parse response JSON
+            data = response.json()
+            return JsonResponse({"success": True, "data": data})
+        else:
+            return JsonResponse({"success": False, "error": response.text}, status=response.status_code)
+    else:
+        # Return a method not allowed response for other HTTP methods
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+    
+        
 
 def ums_pay_callback(request):
     if request.method == 'POST':

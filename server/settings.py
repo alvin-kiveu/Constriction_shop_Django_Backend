@@ -18,10 +18,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "04fb-41-72-215-182.ngrok-free.app",
+    "127.0.0.1",
+    "localhost",
 ]
 
 CORS_ALLOWED_ORIGINS = [
-   ' http://localhost:3000',
+   'http://localhost:3000',
    'http://127.0.0.1:3000',
 ]
 # CORS_ORIGIN_ALLOW_ALL = True
@@ -155,6 +157,8 @@ SITE_URL = 'http://localhost:3000'
 
 STRIPE_SECRET_KEY = 'sk_test_51Oh6mVL5Tg0T8iwi17OsY6BTHCoDFHOoyhfsqSw2BzEkG8bgG9Abt5leZvowiEnw5pftgJ13027XaNKAtzJH2ad500zAPtTXtT'
 
+UMS_PAY_API_KEY = 'SVQ4WVpPQUQ6NnpicDJsMm8='
+UMS_PAY_EMAIL = 'alvo967@gmail.com'
 
 
 # Default primary key field type
